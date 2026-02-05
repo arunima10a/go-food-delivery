@@ -1,0 +1,10 @@
+service:
+  port: ":8081"
+
+postgres:
+  host: "localhost"
+  port: 5432
+  user: "user"
+  password: "password"
+  dbName: "inventory_db"
+  sslMode: "disable"

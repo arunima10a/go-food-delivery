@@ -1,0 +1,77 @@
+basePath: /api/v1
+definitions:
+  errors.ApiError:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  github_com_arunima10a_go-food-delivery_internal_services_catalog-service_internal_products_models.Product:
+    properties:
+      category:
+        type: string
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  internal_products_handlers.CreateProductRequest:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      name:
+        maxLength: 100
+        minLength: 3
+        type: string
+      price:
+        type: number
+    required:
+    - category
+    - name
+    - price
+    type: object
+host: localhost:5001
+info:
+  contact: {}
+  description: This is the Catalog Service for our food delivery App.
+  title: Food Delivery catalog API
+  version: "1.0"
+paths:
+  /products:
+    post:
+      consumes:
+      - application/json
+      description: Save a new product to the database
+      parameters:
+      - description: Product to create
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/internal_products_handlers.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_arunima10a_go-food-delivery_internal_services_catalog-service_internal_products_models.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ApiError'
+      summary: Create a new product
+      tags:
+      - products
+swagger: "2.0"

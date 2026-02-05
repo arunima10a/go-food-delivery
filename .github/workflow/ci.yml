@@ -1,0 +1,42 @@
+name: Go Food Delivery CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24' 
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Run All Unit Tests
+        run: go test -v ./...
+
+  build:
+    name: Docker Build Check
+    runs-on: ubuntu-latest
+    needs: test # Only build if tests pass
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Catalog Service
+        run: docker build -t catalog-service -f internal/services/catalog-service/Dockerfile .
+
+      - name: Build Identity Service
+        run: docker build -t identity-service -f internal/services/identity-service/Dockerfile .
+        
+     

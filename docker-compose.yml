@@ -1,0 +1,142 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: catalog_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d catalog_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q check_running
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  identity-service:
+    build:
+      context: .
+      dockerfile: internal/services/identity-service/Dockerfile
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DBNAME=identity_db
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for healthcheck to pass
+      rabbitmq:
+        condition: service_healthy # Wait for healthcheck to pass
+
+  catalog-service:
+    build:
+      context: .
+      dockerfile: internal/services/catalog-service/Dockerfile
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - RABBITMQ_HOST=rabbitmq
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for healthcheck to pass
+      rabbitmq:
+        condition: service_healthy # Wait for healthcheck to pass
+
+  inventory-service:
+    build:
+      context: .
+      dockerfile: internal/services/inventory-service/Dockerfile
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DBNAME=inventory_db
+      - RABBITMQ_HOST=rabbitmq
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for healthcheck to pass
+      rabbitmq:
+        condition: service_healthy # Wait for healthcheck to pass
+
+  ordering-service:
+    build:
+      context: .
+      dockerfile: internal/services/ordering-service/Dockerfile
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DBNAME=ordering_db
+      - RABBITMQ_HOST=rabbitmq
+      # CRITICAL: Use Service Names for internal HTTP calls
+      - EXTERNALSERVICES_CATALOG=http://catalog-service:8080
+      - EXTERNALSERVICES_INVENTORY=http://inventory-service:8081
+    ports:
+      - "8083:8083"
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for healthcheck to pass
+      rabbitmq:
+        condition: service_healthy # Wait for healthcheck to pass
+
+  search-service:
+    build:
+      context: .
+      dockerfile: internal/services/search-service/Dockerfile
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DBNAME=search_db
+      - RABBITMQ_HOST=rabbitmq
+    ports:
+      - "8084:8084"
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for healthcheck to pass
+      rabbitmq:
+        condition: service_healthy # Wait for healthcheck to pass
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: internal/services/api-gateway/Dockerfile
+    environment:
+      - SERVICES_CATALOG=http://catalog-service:8080
+      - SERVICES_INVENTORY=http://inventory-service:8081
+      - SERVICES_IDENTITY=http://identity-service:8082
+      - SERVICES_ORDERING=http://ordering-service:8083
+      - SERVICES_SEARCH=http://search-service:8084
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for healthcheck to pass
+      rabbitmq:
+        condition: service_healthy # Wait for healthcheck to pass
+  
+  notification-service:
+    build:
+      context: .
+      dockerfile: internal/services/notification-service/Dockerfile
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy

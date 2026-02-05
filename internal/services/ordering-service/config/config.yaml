@@ -1,0 +1,18 @@
+service:
+  port: ":8083" 
+  name: "ordering-service"
+
+externalServices:
+  catalog: "http://localhost:5001"
+  inventory: "http://localhost:8081"
+
+postgres:
+  host: "localhost"
+  port: 5432
+  user: "user"
+  password: "password"
+  dbName: "ordering_db"
+  sslMode: "disable"
+
+jwt:
+  secret: "Xrunimz&69"

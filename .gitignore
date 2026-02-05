@@ -1,0 +1,14 @@
+bin/
+*.exe
+*.test
+
+# Logs
+*.log
+
+# Docker 
+pgdata/
+rabbitmq_data/
+
+# OS files
+.DS_Store
+.vscode/

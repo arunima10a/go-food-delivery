@@ -1,0 +1,215 @@
+POST http://localhost:5001/api/v1/products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3NjkwMTk1NDAsInJvbGUiOiJ1c2VyIiwidXNlcl9pZCI6ImVhMDdjODYxLTgzMzQtNDIwZS1iMzM3LTIzYTZhYmFhNTE1MSJ9.Y-urpezosqfOoMLHcUxU-6-iP_VkALHAYGcm4M92ZbY
+
+{
+    "name": "Secure Pizza",
+    "price": 15.00
+}
+
+###
+
+### 2. Get Stock (Inventory)
+# Replace <ID> with the ID from the step above
+GET http://localhost:8081/api/v1/stock/f6162dcf-50df-4555-8e86-79bd504bee56
+
+###
+
+### 3. Update Stock (Inventory - NEW FEATURE)
+# This tests your Handler -> Repository -> DB flow
+PUT http://localhost:8081/api/v1/stock/f6162dcf-50df-4555-8e86-79bd504bee56
+Content-Type: application/json
+
+{
+    "quantity": 150
+}
+
+
+
+### 4. Create Product with BAD DATA (Should fail)
+POST http://localhost:5001/api/v1/products
+Content-Type: application/json
+
+{
+    "name": "A",
+    "description": "Too short name and negative price",
+    "price": -10.00
+}
+
+### Register a New User
+POST http://localhost:8082/api/v1/identity/register
+Content-Type: application/json
+
+{
+    "username": "arunima",
+    "email": "test@example.com",
+    "password": "secretpassword"
+}
+### Login and get a Token
+POST http://localhost:8082/api/v1/identity/login
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "secretpassword"
+}
+
+## Capture the token from the response above
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3NjkwOTk1NDgsInJvbGUiOiJ1c2VyIiwidXNlcl9pZCI6ImVhMDdjODYxLTgzMzQtNDIwZS1iMzM3LTIzYTZhYmFhNTE1MSJ9.qLD-i5zpp9M_KFtGZn5FmDZ5QyVrAQiEGHMycJZKKYk
+
+### STEP 2: CREATE PRODUCT (Catalog Service)
+### ==========================================
+# @name createProduct
+POST http://localhost:5001/api/v1/products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3Njk3OTU3NjksInJvbGUiOiJ1c2VyIiwidXNlcl9pZCI6ImVhMDdjODYxLTgzMzQtNDIwZS1iMzM3LTIzYTZhYmFhNTE1MSJ9._5weeBxl2GYeFUXU6HXO5qiXjFgM8suEA4NP_9oF_e0
+
+{
+    "name": "Margherita",
+    "description": "Italian pizza made with tomato sauce, mozzerella cheese, and fresh basil",
+    "category": "Pizza",
+    "price": 12.00
+}
+
+### Capture the Product ID from the response
+@productId = {{createProduct.response.body.id}}
+
+### STEP 3: VERIFY INITIAL STOCK (Inventory Service)
+
+GET http://localhost:8081/api/v1/stock/a3f98ba2-8fe9-4958-a84f-2547a0082518
+
+
+
+### 6. Create Order (Order Service)
+POST http://localhost:8083/api/v1/orders
+Content-Type: application/json
+
+{
+    "productId": "951bd18f-6862-4ea5-8a6d-133c293f27f3",
+    "quantity": 2
+}
+###testing secure flow
+
+POST http://localhost:8000/api/v1/orders
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3NzAwMjEwMDcsInJvbGUiOiJ1c2VyIiwidXNlcl9pZCI6ImVhMDdjODYxLTgzMzQtNDIwZS1iMzM3LTIzYTZhYmFhNTE1MSJ9.Hleo3ilK5NB-lyYBTs2-PoyqSR6yFxwF3hD65kUIZ2I
+
+{
+    "productId": "951bd18f-6862-4ea5-8a6d-133c293f27f3",
+    "quantity": 2
+}
+
+### Search for a specific word
+GET http://localhost:8084/api/v1/search?q=sushi
+
+###
+POST http://localhost:8000/api/v1/products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImN1c3RvbWVyMUB0ZXN0LmNvbSIsImV4cCI6MTc3MDIxMjk2NSwicm9sZSI6InVzZXIiLCJ1c2VyX2lkIjoiZTQzY2ZjYmQtZGIxMS00M2RmLWE1YWQtMTE1OTNiMTdkMGNjIn0.9fSH5U7pN04rI_EkKV6fimBCieV9KVWV79Y2KnezEQ8
+
+{
+    "name": "Cheese Burger",
+    "description": " ",
+    "price": 125.00
+}
+
+### Register via Gateway
+POST http://localhost:8000/api/v1/identity/register
+Content-Type: application/json
+
+{
+    "username": "arunima",
+    "email": "gateway@test.com",
+    "password": "Xrunimz$69"
+}
+
+### Login and get a Token
+POST http://localhost:8000/api/v1/identity/login
+Content-Type: application/json
+
+{
+    "email": "gateway@test.com",
+    "password": "Xrunimz$69"
+}
+
+### create product via gateway
+
+POST http://localhost:8000/api/v1/products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3YXlAdGVzdC5jb20iLCJleHAiOjE3NzAzNjQ2NTQsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiI1YWI1YmM0NC04YmE2LTRmNWYtODdkMC05ZmZmMGI2ZWYzNTQifQ.ZNCal-j2huXV7xabQjzFS7C1w-J7aZX6rjxffUQgjTA
+
+{
+    "name": "Margherita",
+    "description": "Italian pizza made with tomato sauce, mozzerella cheese, and fresh basil",
+    "category": "Pizza",
+    "price": 12.00
+}
+
+###
+POST http://localhost:8000/api/v1/products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3YXlAdGVzdC5jb20iLCJleHAiOjE3NzAzNjY4NjUsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiI1YWI1YmM0NC04YmE2LTRmNWYtODdkMC05ZmZmMGI2ZWYzNTQifQ.AhYZf8bchLASBTd3GdLrGqrX_SaQnZ01KuLBEo3R4_M
+
+{
+  "name": "white Sauce pasta",
+  "description": "Creamy pasta",
+  "price": 20.00,
+  "category": "Italian"
+}
+
+
+
+
+
+### Search via Gateway
+GET http://localhost:8000/api/v1/search?category=localhost:8000/api/v1/search?category=Italian
+
+###
+
+GET http://localhost:8084/health
+
+
+###
+
+GET http://localhost:8000/api/v1/search?page=1&pageSize=2
+
+### Register customer
+POST http://localhost:8000/api/v1/identity/register
+Content-Type: application/json
+
+{
+    "username": "customer2",
+    "email": "customer2@test.com",
+    "password": "1234"
+}
+### Login and get a Token
+POST http://localhost:8000/api/v1/identity/login
+Content-Type: application/json
+
+{
+    "email": "customer2@test.com",
+    "password": "1234"
+}
+
+###
+DELETE http://localhost:8000/api/v1/identity/53164eb1-9f15-440d-9cb4-09efbf0c46a9
+
+
+###
+POST http://localhost:8000/api/v1/orders
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3YXlAdGVzdC5jb20iLCJleHAiOjE3NzAzNjY4NjUsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiI1YWI1YmM0NC04YmE2LTRmNWYtODdkMC05ZmZmMGI2ZWYzNTQifQ.AhYZf8bchLASBTd3GdLrGqrX_SaQnZ01KuLBEo3R4_M
+
+{
+    "productId": "5169b689-e376-4060-9b6a-63d8c0dfdba0",
+    "quantity": 1
+
+}
+
+### get order history
+GET http://localhost:8000/api/v1/orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3YXlAdGVzdC5jb20iLCJleHAiOjE3NzAzNjQ2NTQsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiI1YWI1YmM0NC04YmE2LTRmNWYtODdkMC05ZmZmMGI2ZWYzNTQifQ.ZNCal-j2huXV7xabQjzFS7C1w-J7aZX6rjxffUQgjTA
+
+###
+GET http://localhost:8083/api/v1/orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3YXlAdGVzdC5jb20iLCJleHAiOjE3NzAzNjAzMDUsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiI1YWI1YmM0NC04YmE2LTRmNWYtODdkMC05ZmZmMGI2ZWYzNTQifQ.3O6AsYdR36rlIbKdmZeYq9Jh5XKT460trW9q2LgcS5M

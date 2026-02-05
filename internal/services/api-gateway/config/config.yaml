@@ -1,0 +1,11 @@
+service:
+  port: ":8000"
+  name: "API-Gateway"
+
+
+services:
+  catalog: "http://127.0.0.1:8080"
+  inventory: "http://127.0.0.1:8081"
+  identity: "http://127.0.0.1:8082"
+  ordering: "http://127.0.0.1:8083"
+  search: "http://127.0.0.1:8084"

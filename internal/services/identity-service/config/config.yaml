@@ -1,0 +1,14 @@
+service:
+  port: ":8082" 
+  name: "identity-service"
+
+postgres:
+  host: "localhost"
+  port: 5432
+  user: "user"
+  password: "password"
+  dbName: "identity_db"
+  sslMode: "disable"
+
+jwt:
+  secret: "Xrunimz&69"
