@@ -62,7 +62,7 @@ func ConsumerProductCreated(repo repository.StockRepository) {
 	fmt.Println("!!! INVENTORY CONSUMER IS NOW LISTENING ON catalog_events !!!")
 
 	for d := range msgs {
-		fmt.Printf("!!! INVENTORY RECEIVED A MESSAGE: %s !!!\n", string(d.Body))
+		fmt.Printf(" INVENTORY RECEIVED A MESSAGE: %s !!!\n", string(d.Body))
 		var event models.ProductCreatedEvent
 		json.Unmarshal(d.Body, &event)
 

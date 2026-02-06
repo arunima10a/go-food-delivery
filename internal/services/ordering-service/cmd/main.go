@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/arunima10a/go-food-delivery/internal/common/logging"
 	"github.com/arunima10a/go-food-delivery/internal/services/ordering-service/config"
 	"github.com/arunima10a/go-food-delivery/internal/services/ordering-service/internal/common/database"
 	"github.com/arunima10a/go-food-delivery/internal/services/ordering-service/internal/orders/handlers"
@@ -15,6 +16,8 @@ import (
 func main() {
 	cfg := config.GetConfig()
 
+	logger := logging.NewLogger("ordering-service")
+
 	db, err := database.NewPostgresDB(cfg)
 	if err != nil {
 		log.Fatal(err)
@@ -22,7 +25,7 @@ func main() {
 	}
 
 	orderRepo := repository.NewPostgresOrderRepository(db)
-	orderHandler := handlers.NewOrderHandler(cfg, orderRepo)
+	orderHandler := handlers.NewOrderHandler(cfg, orderRepo, logger)
 
 	worker.StartOutboxWorker(db)
 

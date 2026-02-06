@@ -12,23 +12,30 @@ import (
 	"github.com/arunima10a/go-food-delivery/internal/services/ordering-service/internal/orders/repository"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog"
 	"github.com/labstack/echo/v4"
 )
 
 type OrderHandler struct {
 	cfg  *config.Config
 	repo repository.OrderRepository
+	Logger zerolog.Logger
 }
 
-func NewOrderHandler(cfg *config.Config, repo repository.OrderRepository) *OrderHandler {
-	return &OrderHandler{cfg: cfg, repo: repo}
+func NewOrderHandler(cfg *config.Config, repo repository.OrderRepository, logger zerolog.Logger) *OrderHandler {
+	return &OrderHandler{
+		cfg:    cfg,
+		repo:   repo,
+		Logger: logger,
+	}
 }
 
 func (h *OrderHandler) CreateOrder(c echo.Context) error {
 
-	fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-	fmt.Println("!!! ORDERING SERVICE RECEIVED A REQUEST NOW !!!")
-	fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	h.Logger.Info().
+		Str("method", c.Request().Method).
+		Str("path", c.Path()).
+		Msg("New order request received")
 
 	userContext := c.Get("user")
 	if userContext == nil {
