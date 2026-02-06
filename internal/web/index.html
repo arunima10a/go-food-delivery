@@ -1,69 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-    <link rel="stylesheet" href="style.css">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Go-Food | Professional Microservices</title>
-    <!-- Tailwind CSS for instant Pro UI -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .glass {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-        }
-
-        .order-card:hover {
-            transform: translateY(-2px);
-            transition: all 0.2s;
-        }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .order-card:hover { transform: translateY(-2px); transition: all 0.2s; }
     </style>
 </head>
-
 <body class="bg-slate-50 text-slate-900 min-h-screen">
 
     <!-- NAVBAR -->
     <nav class="glass sticky top-0 z-50 border-b border-slate-200 p-4 mb-8">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-bold text-orange-600 flex items-center gap-2">
-                <span>🍔</span> Go-Food <span
-                    class="text-xs bg-slate-200 px-2 py-1 rounded text-slate-500 uppercase tracking-widest font-normal">Internal
-                    System</span>
+                <span>🍔</span> Go-Food <span class="text-xs bg-slate-200 px-2 py-1 rounded text-slate-500 uppercase tracking-widest font-normal">System</span>
             </h1>
             <div id="user-info" class="hidden flex items-center gap-4">
-                <span class="text-sm font-medium text-slate-600" id="current-user"></span>
-                <button onclick="logout()" class="text-sm text-red-500 hover:underline">Logout</button>
+                <span class="text-sm font-medium text-slate-600" id="display-username"></span>
+                <button onclick="logout()" class="text-sm text-red-500 hover:underline font-bold">Logout</button>
             </div>
         </div>
     </nav>
 
     <main class="max-w-6xl mx-auto px-4">
-        <!-- 1. LOGIN SECTION -->
-        <div id="login-section"
-            class="max-w-md mx-auto mt-20 p-8 bg-white rounded-2xl shadow-xl border border-slate-100">
-            <h2 class="text-3xl font-bold mb-6">Welcome back</h2>
-            <p class="text-slate-500 mb-8">Login to manage your orders</p>
-            <div class="space-y-4">
-                <input type="email" id="email"
-                    class="w-full p-3 bg-slate-100 rounded-lg outline-none focus:ring-2 focus:ring-orange-500 transition"
-                    placeholder="Enter your email">
-                <input type="password" id="password"
-                    class="w-full p-3 bg-slate-100 rounded-lg outline-none focus:ring-2 focus:ring-orange-500 transition"
-                    placeholder="Enter your password">
-                <button onclick="login()" id="login-btn"
-                    class="w-full py-3 bg-orange-600 text-white font-bold rounded-lg hover:bg-orange-700 shadow-lg shadow-orange-200">Sign
-                    In</button>
+        
+        <!-- 1. AUTH SECTION (Login/Register) -->
+        <div id="auth-section" class="max-w-md mx-auto mt-20 p-8 bg-white rounded-2xl shadow-xl border border-slate-100">
+            <!-- LOGIN FORM -->
+            <div id="login-form">
+                <h2 class="text-3xl font-bold mb-6 text-slate-800">Welcome back</h2>
+                <div class="space-y-4">
+                    <input type="email" id="email" class="w-full p-3 bg-slate-100 rounded-lg outline-none focus:ring-2 focus:ring-orange-500" placeholder="Email">
+                    <input type="password" id="password" class="w-full p-3 bg-slate-100 rounded-lg outline-none focus:ring-2 focus:ring-orange-500" placeholder="Password">
+                    <button onclick="login()" id="login-btn" class="w-full py-3 bg-orange-600 text-white font-bold rounded-lg hover:bg-orange-700 transition">Sign In</button>
+                </div>
+                <p class="mt-6 text-center text-sm text-slate-600">New here? <a href="javascript:void(0)" onclick="toggleAuth(true)" class="text-orange-600 font-bold">Create an account</a></p>
+            </div>
+
+            <!-- REGISTER FORM -->
+            <div id="register-form" class="hidden">
+                <h2 class="text-3xl font-bold mb-6 text-slate-800">Join Go-Food</h2>
+                <div class="space-y-4">
+                    <input type="text" id="reg-username" class="w-full p-3 bg-slate-100 rounded-lg outline-none focus:ring-2 focus:ring-orange-500" placeholder="Username">
+                    <input type="email" id="reg-email" class="w-full p-3 bg-slate-100 rounded-lg outline-none focus:ring-2 focus:ring-orange-500" placeholder="Email">
+                    <input type="password" id="reg-password" class="w-full p-3 bg-slate-100 rounded-lg outline-none focus:ring-2 focus:ring-orange-500" placeholder="Password">
+                    <button onclick="register()" id="register-btn" class="w-full py-3 bg-slate-900 text-white font-bold rounded-lg hover:bg-black transition">Create Account</button>
+                </div>
+                <p class="mt-6 text-center text-sm text-slate-600">Already have an account? <a href="javascript:void(0)" onclick="toggleAuth(false)" class="text-orange-600 font-bold">Sign in</a></p>
             </div>
         </div>
 
-        <!-- 2. APP SECTION -->
+        <!-- 2. APP SECTION (Hidden by default) -->
         <div id="app-section" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-8 pb-20">
-
+            
             <!-- LEFT: Search & Menu -->
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <h3 class="text-xl font-bold mb-4">Discover Food</h3>
+                    <h3 class="text-xl font-bold mb-4 text-slate-800">Discover Food</h3>
                     <div class="relative">
                         <span class="absolute left-3 top-3 text-slate-400">🔍</span>
                         <input type="text" id="search-query" oninput="search()"
@@ -73,19 +69,19 @@
                 </div>
 
                 <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Products will be injected here -->
+                    <!-- Products dynamically injected here -->
                 </div>
             </div>
 
             <!-- RIGHT: Order History -->
             <div class="space-y-6">
                 <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-xl sticky top-24">
-                    <h3 class="text-xl font-bold mb-6 flex justify-between items-center">
+                    <h3 class="text-xl font-bold mb-6 flex justify-between items-center text-white">
                         My Orders
                         <span id="order-count" class="text-xs bg-orange-600 px-2 py-1 rounded-full">0</span>
                     </h3>
                     <div id="order-history" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
-                        <!-- Orders injected here -->
+                        <!-- Orders dynamically injected here -->
                     </div>
                 </div>
             </div>
@@ -94,5 +90,4 @@
 
     <script src="app.js"></script>
 </body>
-
 </html>
