@@ -10,6 +10,7 @@ type OrderRepository interface {
 	SaveOrder(order *models.Order) error
 	GetOrdersByUserId(userID uuid.UUID) ([]models.Order, error)
 	CreateOrderWithOutbox(order *models.Order, outbox *models.OutBoxMessage) error
+	UpdateOrderStatus(orderId uuid.UUID, status models.OrderStatus) error
 }
 
 type pgOrderRepository struct {
@@ -26,7 +27,7 @@ func (r *pgOrderRepository) SaveOrder(order *models.Order) error {
 
 func (r *pgOrderRepository) GetOrdersByUserId(userID uuid.UUID) ([]models.Order, error) {
 	var orders []models.Order
-	err := r.db.Where("user_id = ?", userID).Find(&orders).Error
+	err := r.db.Where("user_id = ? AND status != ?", userID, models.OrderArchived).Find(&orders).Error
 	return orders, err
 }
 
@@ -41,4 +42,8 @@ func (r *pgOrderRepository) CreateOrderWithOutbox(order *models.Order, outbox *m
 		}
 		return nil
 	})
+}
+
+func (r *pgOrderRepository) UpdateOrderStatus(orderId uuid.UUID, status models.OrderStatus) error {
+	return r.db.Model(&models.Order{}).Where("id = ?", orderId).Update("status", status).Error
 }

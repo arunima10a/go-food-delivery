@@ -1,14 +1,12 @@
 
-
-
 ### Register via Gateway
 POST http://localhost:8000/api/v1/identity/register
 Content-Type: application/json
 
 {
-    "username": "arunima",
+    "username": "name",
     "email": "gateway@test.com",
-    "password": "Xrunimz$69"
+    "password": "YOUR_PASSWORD_HERE"
 }
 
 ### Login and get a Token
@@ -16,8 +14,8 @@ POST http://localhost:8000/api/v1/identity/login
 Content-Type: application/json
 
 {
-    "email": "gateway@test.com",
-    "password": "Xrunimz$69"
+    "email": "name",
+    "password": "YOUR_PASSWORD_HERE"
 }
 
 ### create product via gateway
@@ -55,8 +53,7 @@ GET http://localhost:8000/api/v1/search?category=Italian
 GET http://localhost:8000/api/v1/search?maxPrice=12
 
 
-###
-
+### health check
 GET http://localhost:8084/health
 
 
@@ -69,16 +66,18 @@ POST http://localhost:8000/api/v1/identity/register
 Content-Type: application/json
 
 {
-    "username": "customer2",
-    "email": "customer2@test.com",
+    "username": "customer",
+    "email": "customer@test.com",
     "password": "1234"
 }
+
+
 ### Login and get a Token
 POST http://localhost:8000/api/v1/identity/login
 Content-Type: application/json
 
 {
-    "email": "customer2@test.com",
+    "email": "customer@test.com",
     "password": "1234"
 }
 

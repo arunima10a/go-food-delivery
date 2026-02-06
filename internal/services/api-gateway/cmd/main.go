@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"net/url"
 
 	"github.com/arunima10a/go-food-delivery/internal/services/api-gateway/config"
@@ -12,6 +13,12 @@ import (
 func main() {
 	cfg := config.GetConfig()
 	e := echo.New()
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
+	}))
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())

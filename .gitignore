@@ -12,3 +12,7 @@ rabbitmq_data/
 # OS files
 .DS_Store
 .vscode/
+
+# ignore local files
+test.http
+menu.http

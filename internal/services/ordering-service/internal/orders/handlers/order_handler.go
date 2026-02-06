@@ -25,7 +25,6 @@ func NewOrderHandler(cfg *config.Config, repo repository.OrderRepository) *Order
 }
 
 func (h *OrderHandler) CreateOrder(c echo.Context) error {
-	
 
 	fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 	fmt.Println("!!! ORDERING SERVICE RECEIVED A REQUEST NOW !!!")
@@ -112,7 +111,7 @@ func (h *OrderHandler) CreateOrder(c echo.Context) error {
 		TotalPrice: product.Price * float64(req.Quantity),
 		Status:     models.OrderPending,
 	}
-	
+
 	fmt.Printf("\n[ORDER SERVICE] >>> Order %s saved successfully. Sending to RabbitMQ...\n", order.ID)
 
 	event := models.OrderCreatedEvent{
@@ -155,4 +154,21 @@ func (h *OrderHandler) GetMyOrders(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, orders)
+}
+
+func (h *OrderHandler) UpdateStatus(c echo.Context) error {
+	orderId, _ := uuid.Parse(c.Param("id"))
+
+	type StatusRequest struct {
+		Status models.OrderStatus `json:"status`
+	}
+	req := new(StatusRequest)
+	if err := c.Bind(req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid input")
+	}
+
+	if err := h.repo.UpdateOrderStatus(orderId, req.Status); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failes to update status")
+	}
+	return c.NoContent(http.StatusOK)
 }

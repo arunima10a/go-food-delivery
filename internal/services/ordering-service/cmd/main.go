@@ -37,6 +37,7 @@ func main() {
 
 	r.POST("", orderHandler.CreateOrder)
 	r.GET("", orderHandler.GetMyOrders)
+	r.PUT("/:id/status", orderHandler.UpdateStatus)
 
 	log.Printf("Ordering service started on port %s", cfg.Service.Port)
 	e.Logger.Fatal(e.Start(cfg.Service.Port))

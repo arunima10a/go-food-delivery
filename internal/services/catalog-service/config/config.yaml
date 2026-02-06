@@ -11,4 +11,4 @@ postgres:
   sslMode: "disable"
 
 jwt:
-  secret: "Xrunimz&69"
+  secret: "secret"
