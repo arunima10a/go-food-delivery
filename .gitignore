@@ -14,5 +14,3 @@ rabbitmq_data/
 .vscode/
 
 # ignore local files
-test.http
-menu.http

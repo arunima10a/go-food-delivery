@@ -17,9 +17,12 @@ func StartOutboxWorker(db *gorm.DB) {
 
 			db.Where("processed = ?", false).Find(&messages)
 
+
 			for _, msg := range messages {
 				var event models.OrderCreatedEvent
 				json.Unmarshal(msg.Payload, &event)
+
+				
 
 				err := messaging.PublishEvent("order_events", "", event)
 				if err == nil {

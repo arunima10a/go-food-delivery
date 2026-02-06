@@ -11,11 +11,11 @@ type ProductSearchModel struct {
 }
 
 type ProductCreatedEvent struct {
-	ID    uuid.UUID `json:"id"`
-	Name  string    `json:"name"`
+	ID          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
 	Description string    `json:"description"`
-	Price float64   `json:"price"`
-	Category    string    `gorm:"index" json:"category"`
+	Price       float64   `json:"price"`
+	Category    string    `json:"category"`
 }
 
 type ProductDeletedEvent struct {

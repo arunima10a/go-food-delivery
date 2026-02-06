@@ -72,6 +72,7 @@ func main() {
 	e.GET("/health", func(c echo.Context) error {
 		return c.String(http.StatusOK, fmt.Sprintf("%s is Running", cfg.Service.Name))
 	})
+	
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	e.Validator = &CustomValidator.CustomValidator{Validator: validator.New()}

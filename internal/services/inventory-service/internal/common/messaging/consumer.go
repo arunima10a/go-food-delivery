@@ -1,6 +1,8 @@
 package messaging
 
 import (
+	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -62,14 +64,29 @@ func ConsumerProductCreated(repo repository.StockRepository) {
 	fmt.Println("!!! INVENTORY CONSUMER IS NOW LISTENING ON catalog_events !!!")
 
 	for d := range msgs {
+
+		var encodedString string
+		json.Unmarshal(d.Body, &encodedString) 
+
+		
+		decodedBytes, err := base64.StdEncoding.DecodeString(encodedString)
+		if err != nil {
+			log.Printf("FATAL: Base64 Decode Failed: %v", err)
+			continue
+		}
+
 		fmt.Printf(" INVENTORY RECEIVED A MESSAGE: %s !!!\n", string(d.Body))
+
 		var event models.ProductCreatedEvent
-		json.Unmarshal(d.Body, &event)
+		if err := json.Unmarshal(decodedBytes, &event); err != nil {
+			log.Printf("FATAL: Final JSON Unmarshal Failed: %v", err)
+			continue
+		}
 
 		stock := models.Stock{
 			ID:        uuid.New(),
 			ProductID: event.ID,
-			Quantity:  10, 
+			Quantity:  10,
 		}
 		repo.CreateStock(&stock)
 	}
@@ -79,9 +96,11 @@ func ConsumerProductCreated(repo repository.StockRepository) {
 	go func() {
 		for d := range msgs {
 
+			body := bytes.Trim(d.Body, "\" ")
+
 			var event models.ProductCreatedEvent
 
-			err := json.Unmarshal(d.Body, &event)
+			err := json.Unmarshal(body, &event)
 			if err != nil {
 				log.Printf("Error decoding JSON: %s, err")
 				continue

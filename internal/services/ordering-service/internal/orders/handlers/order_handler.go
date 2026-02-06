@@ -147,9 +147,9 @@ func (h *OrderHandler) CreateOrder(c echo.Context) error {
 
 func (h *OrderHandler) GetMyOrders(c echo.Context) error {
 
-	fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	
 	fmt.Println("!!!   GET HISTORY REQUEST RECEIVED NOW      !!!")
-	fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	
 
 	userToken := c.Get("user").(*jwt.Token)
 	claims := userToken.Claims.(jwt.MapClaims)

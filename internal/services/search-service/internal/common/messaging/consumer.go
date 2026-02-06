@@ -1,21 +1,25 @@
 package messaging
 
 import (
+	"encoding/base64"
+	"encoding/json"
+
 	"github.com/arunima10a/go-food-delivery/internal/services/search-service/internal/products/models"
 	"github.com/arunima10a/go-food-delivery/internal/services/search-service/internal/products/repository"
 
-	"encoding/json"
+	"fmt"
 	"log"
 	"os"
-	"fmt"
+
 	"github.com/google/uuid"
 
 	"github.com/streadway/amqp"
 )
+
 func getRabbitMQURL() string {
 	host := os.Getenv("RABBITMQ_HOST")
 	if host == "" {
-		host = "localhost" // Fallback for running on Mac
+		host = "localhost" 
 	}
 	return fmt.Sprintf("amqp://guest:guest@%s:5672/", host)
 }
@@ -40,6 +44,17 @@ func ConsumeProductCreated(repo repository.SearchRepository) {
 
 	go func() {
 		for d := range msgs {
+
+			var encodedString string
+			json.Unmarshal(d.Body, &encodedString) 
+
+			
+			decodedBytes, err := base64.StdEncoding.DecodeString(encodedString)
+			if err != nil {
+				log.Printf("FATAL: Base64 Decode Failed: %v", err)
+				continue
+			}
+
 			var deleteEvent models.ProductDeletedEvent
 			json.Unmarshal(d.Body, &deleteEvent)
 
@@ -47,21 +62,29 @@ func ConsumeProductCreated(repo repository.SearchRepository) {
 				repo.Delete(deleteEvent.ID)
 				log.Printf("[Search Service] Product Details: %s", deleteEvent.ID)
 			}
-			
+
 			var event models.ProductCreatedEvent
-			json.Unmarshal(d.Body, &event)
+			if err := json.Unmarshal(decodedBytes, &event); err != nil {
+				log.Printf("FATAL: Final JSON Unmarshal Failed: %v", err)
+				continue
+			}
+
+			if event.ID == uuid.Nil {
+				log.Printf("ERROR: Received message with empty ID. Check your JSON tags!")
+				continue
+			}
 
 			searchProduct := &models.ProductSearchModel{
-				ID:    event.ID,
-				Name:  event.Name,
+				ID:          event.ID,
+				Name:        event.Name,
 				Description: event.Description,
-				Price: event.Price,
-				Category: event.Category,
+				Price:       event.Price,
+				Category:    event.Category,
 			}
-            if err := repo.Save(searchProduct); err != nil{
+			if err := repo.Save(searchProduct); err != nil {
 				log.Printf("Failed to sync product to search DB: %v", err)
-			}else{
-			log.Printf("[Search Service] Succesfully Synced: %s", event.Name)
+			} else {
+				log.Printf("[Search Service] Succesfully Synced: %s", event.Name)
 			}
 		}
 	}()

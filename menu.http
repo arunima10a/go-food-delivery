@@ -1,0 +1,170 @@
+@baseUrl = http://localhost:8000/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3YXlAdGVzdC5jb20iLCJleHAiOjE3NzA0ODgyODAsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiI1YWI1YmM0NC04YmE2LTRmNWYtODdkMC05ZmZmMGI2ZWYzNTQifQ.w-lmOND9ofiAhMcGIoey1hnFKTA0Ev_YNy5rxKhWLbw
+
+### 1. Margherita Pizza
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Classic Margherita",
+    "description": "Fresh mozzarella, tomato sauce, and basil on a crispy thin crust.",
+    "price": 12.99,
+    "category": "Pizza"
+}
+
+### 2. Pepperoni Feast
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Pepperoni Feast",
+    "description": "Loaded with spicy pepperoni and double mozzarella cheese.",
+    "price": 15.50,
+    "category": "Pizza"
+}
+
+### 3. Truffle Burger
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Black Truffle Burger",
+    "description": "Wagyu beef patty with truffle aioli and caramelized onions.",
+    "price": 18.00,
+    "category": "Burgers"
+}
+
+### 4. Salmon Sushi Set
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Salmon Nigiri Set",
+    "description": "8 pieces of fresh Atlantic salmon over vinegared rice.",
+    "price": 22.00,
+    "category": "Sushi"
+}
+
+### 5. Grilled Chicken Caesar
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Grilled Chicken Caesar",
+    "description": "Romaine lettuce, parmesan cheese, and house-made croutons.",
+    "price": 10.50,
+    "category": "Salads"
+}
+
+### 6. Chocolate Lava Cake
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Chocolate Lava Cake",
+    "description": "Warm dark chocolate cake with a molten center.",
+    "price": 8.99,
+    "category": "Dessert"
+}
+
+### 7. Spicy Miso Ramen
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Spicy Miso Ramen",
+    "description": "Rich pork broth, spicy miso paste, chashu pork, and a soft-boiled egg.",
+    "price": 16.99,
+    "category": "Asian"
+}
+
+### 8. BBQ Chicken Wings
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Honey BBQ Wings",
+    "description": "10 crispy wings tossed in a sweet and smoky honey BBQ sauce.",
+    "price": 14.00,
+    "category": "Fast Food"
+}
+
+### 9. Classic Beef Tacos
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Street Tacos Set",
+    "description": "3 corn tortillas with seasoned beef, white onions, cilantro, and lime.",
+    "price": 11.50,
+    "category": "Mexican"
+}
+
+### 10. Grilled Salmon Steak
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Atlantic Salmon Steak",
+    "description": "Grilled salmon served with roasted asparagus and lemon butter sauce.",
+    "price": 24.50,
+    "category": "Healthy"
+}
+
+### 11. Greek Salad
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Traditional Greek Salad",
+    "description": "Fresh cucumbers, tomatoes, kalamata olives, and feta cheese with oregano.",
+    "price": 13.00,
+    "category": "Salads"
+}
+
+### 12. Iced Caramel Latte
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Iced Caramel Latte",
+    "description": "Espresso mixed with cold milk and sweet caramel syrup over ice.",
+    "price": 5.50,
+    "category": "Beverages"
+}
+
+### 13. New York Cheesecake
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "NY Style Cheesecake",
+    "description": "Creamy baked cheesecake with a graham cracker crust and berry coulis.",
+    "price": 9.50,
+    "category": "Dessert"
+}
+
+### 14. Veggie Power Bowl
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Veggie Power Bowl",
+    "description": "Quinoa, kale, roasted sweet potatoes, avocado, and tahini dressing.",
+    "price": 15.00,
+    "category": "Healthy"
+}
