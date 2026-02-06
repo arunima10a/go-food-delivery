@@ -69,7 +69,7 @@ func ConsumerProductCreated(repo repository.StockRepository) {
 		stock := models.Stock{
 			ID:        uuid.New(),
 			ProductID: event.ID,
-			Quantity:  10, // Default stock
+			Quantity:  10, 
 		}
 		repo.CreateStock(&stock)
 	}
