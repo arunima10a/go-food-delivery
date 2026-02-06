@@ -1,5 +1,9 @@
 internal/web/* linguist-detectable
 
+internal/web/app.js linguist-detectable
 internal/web/index.html linguist-language=JavaScript
+
+internal/web/index.html linguist-documentation
+internal/web/style.css linguist-documentation
 
 go.sum linguist-generated
