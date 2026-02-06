@@ -28,7 +28,7 @@ func (h *SearchHandler) Search(c echo.Context) error {
 	if page <= 0 {page = 1}
 
 	pageSize, _ := strconv.Atoi(c.QueryParam("pageSize"))
-	if pageSize <=0 { pageSize = 10}
+	if pageSize <=0 { pageSize =10}
 
 	pagination, err := h.repo.AdvancedSearch(name, category, minPrice, maxPrice, page, pageSize)
 	if err != nil {

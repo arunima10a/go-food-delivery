@@ -91,26 +91,34 @@ function logout() {
 async function search() {
     const q = document.getElementById('search-query').value;
     try {
-        const res = await fetch(`${GATEWAY}/search?q=${q}`);
+        // FIX: Add a very large page size to ensure all products are fetched
+        const res = await fetch(`${GATEWAY}/search?q=${q}&pageSize=50`); 
+        
         const data = await res.json();
         
-        // Map over data.items because we added Pagination in Go
-        const html = (data.items || []).map(p => `
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm order-card">
-                <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <span class="text-[10px] font-bold text-orange-600 uppercase tracking-widest">${p.category || 'General'}</span>
-                        <h4 class="text-lg font-bold text-slate-800">${p.name}</h4>
-                    </div>
-                    <span class="text-xl font-bold text-slate-900">$${p.price}</span>
-                </div>
-                <button onclick="placeOrder('${p.id}')" class="w-full py-2 bg-orange-600 text-white font-bold rounded-lg hover:bg-orange-700 transition">
-                    Order Now
-                </button>
+        // Ensure data.items is what we are mapping over
+        const products = data.items || []; 
+        
+        const html = products.map(p => `
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm order-card">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <span class="text-[10px] font-bold text-orange-600 uppercase tracking-widest">${p.category || 'General'}</span>
+                <h4 class="text-lg font-bold text-slate-800">${p.name}</h4>
             </div>
+            <span class="text-xl font-bold text-slate-900">$${p.price}</span>
+        </div>
+        <button onclick="placeOrder('${p.id}')" class="w-full py-2 bg-orange-600 text-white font-bold rounded-lg hover:bg-orange-700 transition">
+            Order Now
+        </button>
+    </div>
         `).join('');
         document.getElementById('product-list').innerHTML = html || "<p class='text-slate-400'>No food found.</p>";
-    } catch (err) { console.error(err); }
+    } catch (err) { 
+        // Log the error to the console so we can see it
+        console.error("Search failed:", err); 
+        document.getElementById('product-list').innerHTML = "<p class='text-red-500'>Error loading menu.</p>";
+    }
 }
 
 /**
