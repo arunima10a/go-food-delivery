@@ -22,7 +22,7 @@ Content-Type: application/json
 
 POST http://localhost:8000/api/v1/products
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3YXlAdGVzdC5jb20iLCJleHAiOjE3NzAzNjQ2NTQsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiI1YWI1YmM0NC04YmE2LTRmNWYtODdkMC05ZmZmMGI2ZWYzNTQifQ.ZNCal-j2huXV7xabQjzFS7C1w-J7aZX6rjxffUQgjTA
+Authorization: Bearer <TOKEN>
 
 {
     "name": "Margherita",
@@ -34,7 +34,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3Y
 ###
 POST http://localhost:8000/api/v1/products
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3YXlAdGVzdC5jb20iLCJleHAiOjE3NzAzNjY4NjUsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiI1YWI1YmM0NC04YmE2LTRmNWYtODdkMC05ZmZmMGI2ZWYzNTQifQ.AhYZf8bchLASBTd3GdLrGqrX_SaQnZ01KuLBEo3R4_M
+Authorization: Bearer 
 
 {
   "name": "white Sauce pasta",
@@ -88,22 +88,21 @@ DELETE http://localhost:8000/api/v1/identity/53164eb1-9f15-440d-9cb4-09efbf0c46a
 ###
 POST http://localhost:8000/api/v1/orders
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3YXlAdGVzdC5jb20iLCJleHAiOjE3NzAzNjY4NjUsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiI1YWI1YmM0NC04YmE2LTRmNWYtODdkMC05ZmZmMGI2ZWYzNTQifQ.AhYZf8bchLASBTd3GdLrGqrX_SaQnZ01KuLBEo3R4_M
+Authorization: Bearer <TOKEN>
 
 {
-    "productId": "5169b689-e376-4060-9b6a-63d8c0dfdba0",
+    "productId": " ",
     "quantity": 1
 
 }
 
 ### get order history
 GET http://localhost:8000/api/v1/orders
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3YXlAdGVzdC5jb20iLCJleHAiOjE3NzAzNjQ2NTQsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiI1YWI1YmM0NC04YmE2LTRmNWYtODdkMC05ZmZmMGI2ZWYzNTQifQ.ZNCal-j2huXV7xabQjzFS7C1w-J7aZX6rjxffUQgjTA
+Authorization: Bearer <TOKEN>
 
 ###
 GET http://localhost:8083/api/v1/orders
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdGV3YXlAdGVzdC5jb20iLCJleHAiOjE3NzAzNjAzMDUsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiI1YWI1YmM0NC04YmE2LTRmNWYtODdkMC05ZmZmMGI2ZWYzNTQifQ.3O6AsYdR36rlIbKdmZeYq9Jh5XKT460trW9q2LgcS5M
-
+Authorization: Bearer <TOKEN>
 ###
 POST http://localhost:8000/api/v1/identity/register
 Content-Type: application/json
