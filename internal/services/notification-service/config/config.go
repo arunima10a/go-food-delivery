@@ -23,8 +23,10 @@ func GetConfig() *Config {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 
-	viper.AddConfigPath(".../config")
+	viper.AddConfigPath("../config")
 	viper.AddConfigPath("./config")
+	viper.AddConfigPath("./internal/services/notification-service/config")
+
 
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
