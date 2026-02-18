@@ -9,16 +9,16 @@ import (
 
 type Config struct {
 	Service struct {
-		Port string `mapstructure: "port"`
-	} `mapstructure: "service"`
+		Port string `mapstructure:"port"`
+	} `mapstructure:"service"`
 	Postgres struct {
-		Host     string `mapstructure: "host"`
-		Port     string `mapstructure: "port"`
-		User     string `mapstructure: "user"`
-		Password string `mapstructure: "password"`
-		DbName   string `mapstructure: "dbName"`
-		SslMode  string `mapstructure: "sslMode"`
-	} `mapstructure: "postgres"`
+		Host     string `mapstructure:"host"`
+		Port     string `mapstructure:"port"`
+		User     string `mapstructure:"user"`
+		Password string `mapstructure:"password"`
+		DbName   string `mapstructure:"dbName"`
+		SslMode  string `mapstructure:"sslMode"`
+	} `mapstructure:"postgres"`
 }
 
 func GetConfig() *Config {
@@ -35,12 +35,12 @@ func GetConfig() *Config {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading config file, %v ,err")
+		log.Fatalf("Error reading config file, %v", err)
 
 	}
 
 	if err := viper.Unmarshal(cfg); err != nil {
-		log.Fatalf("Unable to decode into struct, %v, err")
+		log.Fatalf("Unable to decode into struct, %v", err)
 	}
 	return cfg
 }

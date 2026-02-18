@@ -37,17 +37,16 @@ func GetConfig() *Config {
 	viper.AddConfigPath("./config")
 	viper.AddConfigPath("./internal/services/identity-service/config")
 
-
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading config file, %v ,err")
+		log.Fatalf("Error reading config file, %v", err)
 
 	}
 
 	if err := viper.Unmarshal(cfg); err != nil {
-		log.Fatalf("Unable to decode into struct, %v, err")
+		log.Fatalf("Unable to decode into struct, %v", err)
 	}
 	return cfg
 }
