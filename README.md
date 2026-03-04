@@ -1,6 +1,20 @@
-# Go-Food Delivery Microservices
+#  Go-Food Microservices Ecosystem (Full-Stack)
 
-A full-fledged, event-driven food delivery system built with **Go (Golang)** and **Microservices Architecture**. This project follows **Clean Architecture**, **DDD**, and **CQRS** patterns.
+A complete, high-performance microservice architecture built in **Go (Golang)**. This system demonstrates advanced patterns for **reliability, security, and AI-driven data enrichment**, modeled after modern enterprise distributed systems.
+
+---
+
+##  Key Features & Architectural Patterns
+
+###  AI-Powered Semantic Search 
+Unlike traditional keyword matching, this system uses an **Asynchronous AI Pipeline**. When a product is created, an LLM (via **OpenRouter**) analyzes the description to generate semantic tags (e.g., "energy boost," "vegan-friendly"). These are indexed in a specialized **Search Service**, allowing users to find food based on intent and meaning.
+
+###  Reliability & Security
+*   **Transactional Outbox Pattern:** Solves the "dual-write" problem in the Catalog and Ordering services. Guarantees 100% event delivery to RabbitMQ even during network failures.
+*   **CQRS:** Segregates the **Write Model** (Catalog) from the **Read Model** (Search) to optimize performance and scalability.
+*   **JWT & RBAC:** Implements stateless authentication and Role-Based Access Control to secure administrative routes.
+
+---
 
 ## System Architecture
 The system consists of 6 independent services communicating via HTTP and RabbitMQ:
@@ -19,6 +33,7 @@ The system consists of 6 independent services communicating via HTTP and RabbitM
 - **Database**: PostgreSQL with GORM
 - **Messaging**: RabbitMQ (AMQP)
 - **Security**: JWT (JSON Web Tokens) with RBAC (Role-Based Access Control)
+- **AI**: OpenRouter (LLM Integration for Semantic Tagging)
 - **Reliability**: Outbox Pattern for guaranteed message delivery
 - **Deployment**: Docker & Docker Compose
 - **Testing**: Unit Tests with Testify and SQLMock

@@ -8,6 +8,7 @@ type ProductSearchModel struct {
 	Description string    `json:"description"`
 	Price       float64   `gorm:"index" json:"price"`
 	Category    string    `gorm:"index" json:"category"`
+	AiMetadata  string    `gorm:"type:text" json:"aiMetadata"`
 }
 
 type ProductCreatedEvent struct {

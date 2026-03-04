@@ -105,6 +105,7 @@ services:
       - POSTGRES_HOST=postgres
       - POSTGRES_DBNAME=search_db
       - RABBITMQ_HOST=rabbitmq
+      - AI_APIKEY=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
     ports:
       - "8084:8084"
     depends_on:

@@ -8,3 +8,8 @@ postgres:
   password: "password"
   dbName: "search_db"
   sslMode: "disable"
+
+ai:
+  apiKey: "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"
+  model: "openrouter/free"
+  baseUrl: "https://openrouter.ai/api/v1"

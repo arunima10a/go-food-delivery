@@ -92,13 +92,13 @@ async function search() {
     const q = document.getElementById('search-query').value;
     try {
         // FIX: Add a very large page size to ensure all products are fetched
-        const res = await fetch(`${GATEWAY}/search?q=${q}&pageSize=50`); 
-        
+        const res = await fetch(`${GATEWAY}/search?q=${q}&pageSize=50`);
+
         const data = await res.json();
-        
+
         // Ensure data.items is what we are mapping over
-        const products = data.items || []; 
-        
+        const products = data.items || [];
+
         const html = products.map(p => `
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm order-card">
         <div class="flex justify-between items-start mb-4">
@@ -108,15 +108,19 @@ async function search() {
             </div>
             <span class="text-xl font-bold text-slate-900">$${p.price}</span>
         </div>
+
+        <p class="text-sm text-slate-500 mb-4 line-clamp-2">${p.description || 'No description available.'}</p>
+
+        
         <button onclick="placeOrder('${p.id}')" class="w-full py-2 bg-orange-600 text-white font-bold rounded-lg hover:bg-orange-700 transition">
             Order Now
         </button>
     </div>
         `).join('');
         document.getElementById('product-list').innerHTML = html || "<p class='text-slate-400'>No food found.</p>";
-    } catch (err) { 
+    } catch (err) {
         // Log the error to the console so we can see it
-        console.error("Search failed:", err); 
+        console.error("Search failed:", err);
         document.getElementById('product-list').innerHTML = "<p class='text-red-500'>Error loading menu.</p>";
     }
 }
@@ -128,7 +132,7 @@ async function placeOrder(productId) {
     try {
         const res = await fetch(`${GATEWAY}/orders`, {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${TOKEN}`
             },
@@ -152,13 +156,13 @@ async function loadOrders() {
         });
         if (!res.ok) return;
         const data = await res.json();
-        
+
         document.getElementById('order-count').innerText = data.length;
         document.getElementById('order-history').innerHTML = data.map(o => `
             <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 order-card relative group">
                 ${o.status !== 'PENDING' ? `<button onclick="updateStatus('${o.id}', 'ARCHIVED')" class="absolute -top-1 -right-1 bg-red-500 text-white w-5 h-5 rounded-full text-[10px] opacity-0 group-hover:opacity-100 transition">✕</button>` : ''}
                 <div class="flex justify-between text-[10px] text-slate-400 mb-1">
-                    <span>#${o.id.substring(0,8)}</span>
+                    <span>#${o.id.substring(0, 8)}</span>
                     <span class="${o.status === 'COMPLETED' ? 'text-green-400' : 'text-orange-400'} font-bold">${o.status}</span>
                 </div>
                 <div class="flex justify-between items-center">
@@ -177,7 +181,7 @@ async function updateStatus(orderId, newStatus) {
     try {
         await fetch(`${GATEWAY}/orders/${orderId}/status`, {
             method: 'PUT',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${TOKEN}`
             },

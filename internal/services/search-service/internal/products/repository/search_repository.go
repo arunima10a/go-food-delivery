@@ -36,7 +36,7 @@ func (r *pgSearchRepository) AdvancedSearch(name string, category string, minPri
 
 	if name != "" {
 		searchTerm := "%" + name + "%"
-		query = query.Where("name ILIKE ? OR category ILIKE ?", searchTerm, searchTerm)
+		query = query.Where("name ILIKE ? OR category ILIKE ? OR ai_metadata ILIKE ?", searchTerm, searchTerm, searchTerm)
 	}
 	if category != "" {
 		log.Printf("DEBUG: Applying category filter: %s", category)
@@ -48,9 +48,13 @@ func (r *pgSearchRepository) AdvancedSearch(name string, category string, minPri
 	if maxPrice > 0 {
 		query = query.Where("price <= ?", maxPrice)
 	}
-	query.Count(&totalItems)
+	if err := query.Session(&gorm.Session{}).Count(&totalItems).Error; err != nil {
+		return nil, err
+	}
 
 	offset := (page - 1) * pageSize
+	
+	
 
 	err := query.
 		Offset(offset).

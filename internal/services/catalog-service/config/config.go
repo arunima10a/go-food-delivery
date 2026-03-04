@@ -25,6 +25,8 @@ type Config struct {
 	JWT struct {
 		Secret string `mapstructure:"secret"`
 	} `mapstructure:"jwt"`
+
+	
 }
 
 func GetConfig() *Config {
@@ -41,7 +43,7 @@ func GetConfig() *Config {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading config file, %v ",err)
+		log.Fatalf("Error reading config file, %v ", err)
 
 	}
 

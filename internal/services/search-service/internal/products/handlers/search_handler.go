@@ -10,12 +10,11 @@ import (
 
 type SearchHandler struct {
 	repo repository.SearchRepository
-
 }
 
-func NewSearchHandler(repo repository.SearchRepository) *SearchHandler{ 
+func NewSearchHandler(repo repository.SearchRepository) *SearchHandler {
 	return &SearchHandler{repo: repo}
-} 
+}
 
 func (h *SearchHandler) Search(c echo.Context) error {
 	name := c.QueryParam("q")
@@ -25,21 +24,19 @@ func (h *SearchHandler) Search(c echo.Context) error {
 	maxPrice, _ := strconv.ParseFloat(c.QueryParam("maxPrice"), 64)
 
 	page, _ := strconv.Atoi(c.QueryParam("page"))
-	if page <= 0 {page = 1}
+	if page <= 0 {
+		page = 1
+	}
 
 	pageSize, _ := strconv.Atoi(c.QueryParam("pageSize"))
-	if pageSize <=0 { pageSize =10}
+	if pageSize <= 0 {
+		pageSize = 10
+	}
 
 	pagination, err := h.repo.AdvancedSearch(name, category, minPrice, maxPrice, page, pageSize)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error":"Search failed"})
-	} 
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Search failed"})
+	}
 	return c.JSON(http.StatusOK, pagination)
 
-	products, err := h.repo.AdvancedSearch(name, category, minPrice, maxPrice, page, pageSize)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error":"Search failed"})
-
-	}
-	return c.JSON(http.StatusOK, products)
 }

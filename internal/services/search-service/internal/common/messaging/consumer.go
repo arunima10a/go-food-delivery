@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/arunima10a/go-food-delivery/internal/services/search-service/internal/products/models"
+	"github.com/arunima10a/go-food-delivery/internal/services/search-service/internal/products/ai"
 	"github.com/arunima10a/go-food-delivery/internal/services/search-service/internal/products/repository"
 
 	"fmt"
@@ -19,12 +20,12 @@ import (
 func getRabbitMQURL() string {
 	host := os.Getenv("RABBITMQ_HOST")
 	if host == "" {
-		host = "localhost" 
+		host = "localhost"
 	}
 	return fmt.Sprintf("amqp://guest:guest@%s:5672/", host)
 }
 
-func ConsumeProductCreated(repo repository.SearchRepository) {
+func ConsumeProductCreated(repo repository.SearchRepository, aiClient *ai.OpenRouterClient) {
 	conn, err := amqp.Dial(getRabbitMQURL())
 	if err != nil {
 		log.Fatalf("Failed to connect to RabbitMQ: %v", err)
@@ -46,9 +47,8 @@ func ConsumeProductCreated(repo repository.SearchRepository) {
 		for d := range msgs {
 
 			var encodedString string
-			json.Unmarshal(d.Body, &encodedString) 
+			json.Unmarshal(d.Body, &encodedString)
 
-			
 			decodedBytes, err := base64.StdEncoding.DecodeString(encodedString)
 			if err != nil {
 				log.Printf("FATAL: Base64 Decode Failed: %v", err)
@@ -74,12 +74,23 @@ func ConsumeProductCreated(repo repository.SearchRepository) {
 				continue
 			}
 
+			log.Printf("DEBUG: Consumer received product: %s with description: %s", event.Name, event.Description)
+
+			tags, err := aiClient.GenerateSemanticTags(event.Name, event.Description)
+			if err != nil {
+				log.Printf("AI Enrichment failed: %v", err)
+				tags = "error-fetching-tags"
+			}
+
+			log.Printf("DEBUG: AI generated these tags: %s", tags)
+
 			searchProduct := &models.ProductSearchModel{
 				ID:          event.ID,
 				Name:        event.Name,
 				Description: event.Description,
 				Price:       event.Price,
 				Category:    event.Category,
+				AiMetadata:  tags,
 			}
 			if err := repo.Save(searchProduct); err != nil {
 				log.Printf("Failed to sync product to search DB: %v", err)

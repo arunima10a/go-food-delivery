@@ -12,3 +12,4 @@ postgres:
 
 jwt:
   secret: "secret"
+

@@ -30,6 +30,12 @@ type Config struct {
 		Catalog   string `mapstructure:"catalog"`
 		Inventory string `mapstructure:"inventory"`
 	} `mapstructure:"externalServices"`
+
+	AI struct {
+		ApiKey  string `mapstructure:"apiKey"`
+		Model   string `mapstructure:"model"`
+		BaseUrl string `mapstructure:"baseUrl"`
+	} `mapstructure:"ai"`
 }
 
 func GetConfig() *Config {
