@@ -1,4 +1,4 @@
-#  Go-Food Microservices Ecosystem (Full-Stack)
+#  Go-Food Microservices Ecosystem 
 
 A complete, high-performance microservice architecture built in **Go (Golang)**. This system demonstrates advanced patterns for **reliability, security, and AI-driven data enrichment**, modeled after modern enterprise distributed systems.
 
